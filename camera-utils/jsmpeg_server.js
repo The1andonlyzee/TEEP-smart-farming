@@ -102,9 +102,16 @@ app.get('/', (req, res) => {
           }
           h1 {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             color: #4CAF50;
             font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+          }
+          h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #4CAF50;
+            font-size: 2em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
           }
           .grid {
@@ -165,6 +172,7 @@ app.get('/', (req, res) => {
       </head>
       <body>
         <h1>🌱 Smart Farm Camera System</h1>
+        <h2> vibe coded </h2>
         <div class="grid">
           ${cameras.map((cam, idx) => `
             <div class="camera-container">

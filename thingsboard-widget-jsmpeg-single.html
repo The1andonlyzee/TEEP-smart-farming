@@ -1,30 +1,32 @@
 <div style="width: 100%; height: 500px; background: #000; border-radius: 8px; overflow: hidden; position: relative;">
   <canvas id="camera-canvas" style="width: 100%; height: 100%;"></canvas>
-  <div id="camera-status" style="position: absolute; top: 10px; left: 10px; background: rgba(255,152,0,0.9); color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+  <div id="camera-status"
+    style="position: absolute; top: 10px; left: 10px; background: rgba(255,152,0,0.9); color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; font-weight: bold;">
     Initializing...
   </div>
-  <div id="debug-log" style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #0f0; padding: 10px; border-radius: 4px; font-size: 11px; font-family: monospace; max-height: 150px; overflow-y: auto; display: block;">
+  <div id="debug-log"
+    style="position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #0f0; padding: 10px; border-radius: 4px; font-size: 11px; font-family: monospace; max-height: 150px; overflow-y: auto; display: block;">
     Starting debug log...
   </div>
 </div>
 
 <script>
-  self.onInit = function() {
+  (function () {
     // ⚠️ CONFIGURATION - CHANGE THESE
     var PC_IP = '192.168.0.100';  // Your PC's IP address
     var WS_PORT = 9001;            // 9001 for Camera 1, 9002 for Camera 2
-    
+
     var wsUrl = 'ws://' + PC_IP + ':' + WS_PORT;
     var jsmpegCDNs = [
       'https://cdn.jsdelivr.net/gh/phoboslab/jsmpeg@master/jsmpeg.min.js',
       'https://unpkg.com/jsmpeg@0.2.0/jsmpeg.min.js',
       'http://' + PC_IP + ':3000/jsmpeg.min.js'
     ];
-    
+
     var canvas = document.getElementById('camera-canvas');
     var statusEl = document.getElementById('camera-status');
     var debugLog = document.getElementById('debug-log');
-    
+
     function log(msg, color) {
       color = color || '#0f0';
       var time = new Date().toLocaleTimeString();
@@ -34,65 +36,65 @@
       debugLog.insertBefore(entry, debugLog.firstChild);
       console.log('[Camera Widget]', msg);
     }
-    
+
     function updateStatus(msg, color) {
       statusEl.textContent = msg;
       if (color) statusEl.style.background = color;
     }
-    
+
     log('Widget initialized');
     log('PC_IP: ' + PC_IP);
     log('WS_PORT: ' + WS_PORT);
     log('WebSocket URL: ' + wsUrl);
     log('Browser: ' + navigator.userAgent.substring(0, 50));
     log('Protocol: ' + window.location.protocol);
-    
+
     // Check if HTTPS
     if (window.location.protocol === 'https:') {
       log('⚠️ WARNING: Using HTTPS, WS connections may be blocked!', '#ff9800');
       log('Try accessing via HTTP: http://...', '#ff9800');
     }
-    
+
     // Test WebSocket connectivity first
     function testWebSocket(callback) {
       log('Testing WebSocket connection...');
       updateStatus('Testing connection...', 'rgba(255,152,0,0.9)');
-      
+
       try {
         var testWs = new WebSocket(wsUrl);
-        
-        testWs.onopen = function() {
+
+        testWs.onopen = function () {
           log('✅ WebSocket test successful!', '#0f0');
           testWs.close();
           callback(true);
         };
-        
-        testWs.onerror = function(error) {
+
+        testWs.onerror = function (error) {
           log('❌ WebSocket test failed!', '#f00');
           log('Error: ' + JSON.stringify(error), '#f00');
           callback(false);
         };
-        
-        testWs.onclose = function(event) {
+
+        testWs.onclose = function (event) {
           if (!event.wasClean) {
             log('WebSocket closed uncleanly. Code: ' + event.code, '#f00');
           }
         };
-        
-        setTimeout(function() {
+
+        setTimeout(function () {
           if (testWs.readyState === WebSocket.CONNECTING) {
             log('❌ Connection timeout', '#f00');
             testWs.close();
             callback(false);
           }
         }, 5000);
-        
+
       } catch (e) {
         log('❌ Exception: ' + e.message, '#f00');
         callback(false);
       }
     }
-    
+
     // Load JSMpeg library
     var currentCDN = 0;
     function loadJSMpeg(callback) {
@@ -101,33 +103,33 @@
         callback();
         return;
       }
-      
+
       if (currentCDN >= jsmpegCDNs.length) {
         log('❌ Failed to load JSMpeg from all sources', '#f00');
         updateStatus('❌ Failed to load player', 'rgba(244,67,54,0.9)');
         return;
       }
-      
+
       log('Trying CDN ' + (currentCDN + 1) + ': ' + jsmpegCDNs[currentCDN]);
       updateStatus('Loading player...', 'rgba(255,152,0,0.9)');
-      
+
       var script = document.createElement('script');
       script.src = jsmpegCDNs[currentCDN];
-      
-      script.onload = function() {
+
+      script.onload = function () {
         log('✅ JSMpeg loaded from: ' + jsmpegCDNs[currentCDN], '#0f0');
         callback();
       };
-      
-      script.onerror = function() {
+
+      script.onerror = function () {
         log('❌ Failed to load from: ' + jsmpegCDNs[currentCDN], '#f00');
         currentCDN++;
         loadJSMpeg(callback);
       };
-      
+
       document.head.appendChild(script);
     }
-    
+
     // Initialize player
     function initPlayer() {
       if (typeof JSMpeg === 'undefined') {
@@ -135,40 +137,40 @@
         updateStatus('❌ Player not loaded', 'rgba(244,67,54,0.9)');
         return;
       }
-      
+
       log('Initializing JSMpeg player...');
       updateStatus('Connecting...', 'rgba(255,152,0,0.9)');
-      
+
       try {
         var player = new JSMpeg.Player(wsUrl, {
           canvas: canvas,
           autoplay: true,
           audio: false,
           videoBufferSize: 512 * 1024,
-          
-          onSourceEstablished: function() {
+
+          onSourceEstablished: function () {
             log('✅ Stream established!', '#0f0');
             updateStatus('● Live', 'rgba(76,175,80,0.9)');
             // Hide debug log after 5 seconds if successful
-            setTimeout(function() {
+            setTimeout(function () {
               debugLog.style.display = 'none';
             }, 5000);
           },
-          
-          onSourceCompleted: function() {
+
+          onSourceCompleted: function () {
             log('❌ Stream ended/disconnected', '#f00');
             updateStatus('● Disconnected', 'rgba(244,67,54,0.9)');
             debugLog.style.display = 'block';
           }
         });
-        
+
         // Monitor connection state
-        setTimeout(function() {
+        setTimeout(function () {
           if (player.client) {
             var state = player.client.readyState;
             var states = ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED'];
             log('WebSocket state: ' + states[state]);
-            
+
             if (state === WebSocket.CLOSED || state === WebSocket.CLOSING) {
               log('❌ WebSocket closed or closing', '#f00');
               updateStatus('❌ Connection Failed', 'rgba(244,67,54,0.9)');
@@ -177,15 +179,15 @@
             log('❌ No client object created', '#f00');
           }
         }, 3000);
-        
+
       } catch (e) {
         log('❌ Player error: ' + e.message, '#f00');
         updateStatus('❌ Error', 'rgba(244,67,54,0.9)');
       }
     }
-    
+
     // Start the sequence
-    testWebSocket(function(success) {
+    testWebSocket(function (success) {
       if (success) {
         loadJSMpeg(initPlayer);
       } else {
@@ -197,5 +199,5 @@
         log('4. Mixed content (HTTPS blocking WS)', '#ff9800');
       }
     });
-  };
+  })();
 </script>
