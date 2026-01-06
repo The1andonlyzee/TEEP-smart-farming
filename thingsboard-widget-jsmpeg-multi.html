@@ -3,59 +3,89 @@
     <h4 style="color: #4CAF50; margin: 0 0 10px 0; font-size: 16px;">Camera Zone 1</h4>
     <div style="position: relative; background: #000; border-radius: 4px;">
       <canvas id="cam1" style="width: 100%; height: 280px;"></canvas>
-      <div id="status1" style="position: absolute; top: 5px; right: 5px; background: rgba(255,152,0,0.9); color: white; padding: 4px 8px; border-radius: 3px; font-size: 11px;">●</div>
+      <div id="status1"
+        style="position: absolute; top: 5px; right: 5px; background: rgba(255,152,0,0.9); color: white; padding: 4px 8px; border-radius: 3px; font-size: 11px;">
+        ●</div>
     </div>
   </div>
-  
+
   <div style="background: #2a2a2a; padding: 10px; border-radius: 8px; position: relative;">
     <h4 style="color: #4CAF50; margin: 0 0 10px 0; font-size: 16px;">Camera Zone 2</h4>
     <div style="position: relative; background: #000; border-radius: 4px;">
       <canvas id="cam2" style="width: 100%; height: 280px;"></canvas>
-      <div id="status2" style="position: absolute; top: 5px; right: 5px; background: rgba(255,152,0,0.9); color: white; padding: 4px 8px; border-radius: 3px; font-size: 11px;">●</div>
+      <div id="status2"
+        style="position: absolute; top: 5px; right: 5px; background: rgba(255,152,0,0.9); color: white; padding: 4px 8px; border-radius: 3px; font-size: 11px;">
+        ●</div>
     </div>
   </div>
 </div>
 
 <script>
-  self.onInit = function() {
+  (function () {
     var PC_IP = '192.168.0.100';  // ⚠️ CHANGE THIS
-    var jsmpegUrl = 'http://' + PC_IP + ':3000/jsmpeg/jsmpeg.min.js';
-    
+    var jsmpegCDNs = [
+      'https://cdn.jsdelivr.net/gh/phoboslab/jsmpeg@master/jsmpeg.min.js',
+      'https://unpkg.com/jsmpeg@0.2.0/jsmpeg.min.js',
+      'http://' + PC_IP + ':3000/jsmpeg.min.js'
+    ];
+
     var cameras = [
       { canvas: 'cam1', wsPort: 9001, status: 'status1', name: 'Zone 1' },
       { canvas: 'cam2', wsPort: 9002, status: 'status2', name: 'Zone 2' }
     ];
-    
+
+    var currentCDN = 0;
+
     function loadLib(cb) {
-      if (typeof JSMpeg !== 'undefined') { cb(); return; }
-      var s = document.createElement('script');
-      s.src = jsmpegUrl;
-      s.onload = cb;
-      s.onerror = function() {
-        cameras.forEach(function(c) {
+      if (typeof JSMpeg !== 'undefined') {
+        cb();
+        return;
+      }
+
+      if (currentCDN >= jsmpegCDNs.length) {
+        console.error('Failed to load JSMpeg from all sources');
+        cameras.forEach(function (c) {
           document.getElementById(c.status).textContent = '❌';
+          document.getElementById(c.status).style.background = 'rgba(244,67,54,0.9)';
         });
+        return;
+      }
+
+      var s = document.createElement('script');
+      s.src = jsmpegCDNs[currentCDN];
+      s.onload = function () {
+        console.log('JSMpeg loaded from:', jsmpegCDNs[currentCDN]);
+        cb();
+      };
+      s.onerror = function () {
+        console.warn('Failed to load from:', jsmpegCDNs[currentCDN]);
+        currentCDN++;
+        loadLib(cb);
       };
       document.head.appendChild(s);
     }
-    
+
     function init() {
-      cameras.forEach(function(c) {
+      cameras.forEach(function (c) {
         var wsUrl = 'ws://' + PC_IP + ':' + c.wsPort;
-        
+
+        console.log('Connecting', c.name, 'to', wsUrl);
+
         new JSMpeg.Player(wsUrl, {
           canvas: document.getElementById(c.canvas),
           autoplay: true,
           audio: false,
           videoBufferSize: 512 * 1024,
-          
-          onSourceEstablished: function() {
+
+          onSourceEstablished: function () {
+            console.log(c.name, 'connected');
             var s = document.getElementById(c.status);
             s.textContent = '● LIVE';
             s.style.background = 'rgba(76,175,80,0.9)';
           },
-          
-          onSourceCompleted: function() {
+
+          onSourceCompleted: function () {
+            console.log(c.name, 'disconnected');
             var s = document.getElementById(c.status);
             s.textContent = '● OFF';
             s.style.background = 'rgba(244,67,54,0.9)';
@@ -63,7 +93,7 @@
         });
       });
     }
-    
+
     loadLib(init);
-  };
+  })();
 </script>

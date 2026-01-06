@@ -10,10 +10,10 @@
 </div>
 
 <script>
-  self.onInit = function() {
+  (function () {
     var PC_IP = '192.168.0.100';  // ⚠️ CHANGE THIS
-    
+
     document.getElementById('cam1').src = 'http://' + PC_IP + ':3000/camera1?t=' + Date.now();
     document.getElementById('cam2').src = 'http://' + PC_IP + ':3000/camera2?t=' + Date.now();
-  };
+  })();
 </script>
