@@ -22,7 +22,7 @@ const cameras = [
   },
   {
     name: 'Camera_Zone_2',
-    rtspUrl: 'rtsp://192.168.0.142:554/11',
+    rtspUrl: 'rtsp://192.168.0.172:554/profile1',
     wsPort: 9002
   }
 ];
