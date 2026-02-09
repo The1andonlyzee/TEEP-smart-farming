@@ -119,12 +119,12 @@ void parseDataFromMega(String data) {
   
   int firstComma = data.indexOf(',');
   int secondComma = data.indexOf(',', firstComma + 1);
-  int thirdComma = data.indexOf(',', firstComma + 2);
+  int thirdComma = data.indexOf(',', secondComma + 1);
   
   if (firstComma > 0 && secondComma > 0 && thirdComma> 0) {
     moisture = data.substring(0, firstComma).toInt();
     moisturePercent = data.substring(firstComma + 1, secondComma).toInt();
-    relayState = data.substring(secondComma, thirdComma) == "1";
+    relayState = data.substring(secondComma + 1, thirdComma) == "1";
     mode = data.substring(thirdComma + 1);
     mode.trim();
     
@@ -136,7 +136,7 @@ void parseDataFromMega(String data) {
 void sendTelemetry() {
   char payload[150];
   snprintf(payload, sizeof(payload), 
-           "{\"moisture\":%d,\"moisture percentage\":%d\%,\"relay\":%s,\"mode\":\"%s\"}", 
+           "{\"moisture\":%d,\"moisture_percentage\":%d%,\"relay\":%s,\"mode\":\"%s\"}", 
            moisture,
            moisturePercent,
            relayState ? "true" : "false",
