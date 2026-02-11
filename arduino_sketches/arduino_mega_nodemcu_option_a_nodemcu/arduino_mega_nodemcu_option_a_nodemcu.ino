@@ -19,7 +19,7 @@ const char* password = "amaap67674";
 // ThingsBoard settings
 const char* mqttServer = "192.168.0.107";
 const int mqttPort = 1883;
-const char* accessToken = "qe79zygknyij3wvuy0dz";
+const char* accessToken = "6hr4kyzxnd3n7b7291lw"; 
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
