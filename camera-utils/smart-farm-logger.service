@@ -1,0 +1,24 @@
+[Unit]
+Description=Smart Farm Data Logger
+After=network.target thingsboard.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=k410-2nd-ubuntu-pc
+WorkingDirectory=/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/camera-utils
+ExecStart=/usr/bin/node /home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/camera-utils/smart_farm_logger.js
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/camera-utils/logs/smart_farm.log
+StandardError=append:/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/camera-utils/logs/smart_farm_error.log
+
+# Environment
+Environment=NODE_ENV=production
+
+# Restart policy
+StartLimitInterval=200
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
