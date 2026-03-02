@@ -1,0 +1,169 @@
+.
+├── arduino_sketches
+│   ├── arduino_mega_5sensors
+│   │   └── arduino_mega_5sensors.ino
+│   ├── arduino_mega_esp8266_option_a_esp8266
+│   │   └── arduino_mega_esp8266_option_a_esp8266.ino
+│   ├── arduino_mega_esp8266_option_a_mega
+│   │   └── arduino_mega_esp8266_option_a_mega.ino
+│   ├── ESP32S_wifi_thingsboard_relay_sensors
+│   │   └── ESP32S_wifi_thingsboard_relay_sensors.ino
+│   └── esp8266_5sensors
+│       └── esp8266_5sensors.ino
+├── docker-compose.yml
+├── docs
+│   └── smart farm architecture.drawio.png
+├── README.md
+├── START_HERE.md
+├── system
+│   ├── config
+│   │   ├── cameras.json
+│   │   └── schedules.json
+│   ├── dataset_loader.py
+│   ├── healthcheck.sh
+│   ├── install.sh
+│   ├── old_jsmpeg_server.js
+│   ├── smart_farm_logger.js
+│   ├── smart-farm-logger.service
+│   ├── static
+│   │   └── jsmpeg.min.js
+│   ├── status.sh
+│   └── tb_config_helper.js
+├── thingsboard-widget-jsmpeg-multi.html
+├── thingsboard-widget-jsmpeg-single.html
+├── tools
+│   ├── check-status
+│   └── restart-server
+├── tree2202.txt
+└── USAGE_GUIDE.md
+
+12 directories, 26 files
+.
+├── archived
+│   └── old_jsmpeg_server.js
+├── arduino_sketches
+│   ├── arduino_mega_5sensors
+│   │   └── arduino_mega_5sensors.ino
+│   ├── arduino_mega_esp8266_option_a_esp8266
+│   │   └── arduino_mega_esp8266_option_a_esp8266.ino
+│   ├── arduino_mega_esp8266_option_a_mega
+│   │   └── arduino_mega_esp8266_option_a_mega.ino
+│   ├── ESP32S_wifi_thingsboard_relay_sensors
+│   │   └── ESP32S_wifi_thingsboard_relay_sensors.ino
+│   └── esp8266_5sensors
+│       └── esp8266_5sensors.ino
+├── docker-compose.yml
+├── docs
+│   └── smart farm architecture.drawio.png
+├── QUICK_REFERENCE.md
+├── README.md
+├── START_HERE.md
+├── system
+│   ├── config
+│   │   ├── cameras.json
+│   │   └── schedules.json
+│   ├── healthcheck.sh
+│   ├── install.sh
+│   ├── smart_farm_logger.js
+│   ├── smart-farm-logger.service
+│   ├── static
+│   │   └── jsmpeg.min.js
+│   └── status.sh
+├── thingsboard-widget-jsmpeg-multi.html
+├── thingsboard-widget-jsmpeg-single.html
+├── tools
+│   ├── check-status
+│   └── restart-server
+├── tree2202.txt
+├── TROUBLESHOOTING_FLOWCHART.md
+└── USAGE_GUIDE.md
+
+13 directories, 26 files
+.
+├── archived
+│   └── old_jsmpeg_server.js
+├── arduino_sketches
+│   ├── arduino_mega_5sensors
+│   │   └── arduino_mega_5sensors.ino
+│   ├── arduino_mega_esp8266_option_a_esp8266
+│   │   └── arduino_mega_esp8266_option_a_esp8266.ino
+│   ├── arduino_mega_esp8266_option_a_mega
+│   │   └── arduino_mega_esp8266_option_a_mega.ino
+│   ├── ESP32S_wifi_thingsboard_relay_sensors
+│   │   └── ESP32S_wifi_thingsboard_relay_sensors.ino
+│   └── esp8266_5sensors
+│       └── esp8266_5sensors.ino
+├── CONFIG_GUIDE.md
+├── docker-compose.yml
+├── docs
+│   └── smart farm architecture.drawio.png
+├── package-lock.json
+├── QUICK_REFERENCE.md
+├── README.md
+├── START_HERE.md
+├── system
+│   ├── config
+│   │   ├── cameras.json
+│   │   ├── schedules.json
+│   │   └── thingsboard.json
+│   ├── healthcheck.sh
+│   ├── install.sh
+│   ├── smart_farm_logger.js
+│   ├── smart-farm-logger.service
+│   ├── static
+│   │   └── jsmpeg.min.js
+│   └── status.sh
+├── thingsboard-widget-jsmpeg-multi.html
+├── thingsboard-widget-jsmpeg-single.html
+├── tools
+│   ├── check-status
+│   └── restart-server
+├── tree2202.txt
+├── TROUBLESHOOTING_FLOWCHART.md
+└── USAGE_GUIDE.md
+
+13 directories, 29 files
+.
+├── archived
+│   └── old_jsmpeg_server.js
+├── arduino_sketches
+│   ├── arduino_mega_5sensors
+│   │   └── arduino_mega_5sensors.ino
+│   ├── arduino_mega_esp8266_option_a_esp8266
+│   │   └── arduino_mega_esp8266_option_a_esp8266.ino
+│   ├── arduino_mega_esp8266_option_a_mega
+│   │   └── arduino_mega_esp8266_option_a_mega.ino
+│   ├── ESP32S_wifi_thingsboard_relay_sensors
+│   │   └── ESP32S_wifi_thingsboard_relay_sensors.ino
+│   └── esp8266_5sensors
+│       └── esp8266_5sensors.ino
+├── CONFIG_GUIDE.md
+├── docker-compose.yml
+├── docs
+│   ├── report_structure.txt
+│   └── smart farm architecture.drawio.png
+├── QUICK_REFERENCE.md
+├── README.md
+├── START_HERE.md
+├── system
+│   ├── config
+│   │   ├── cameras.json
+│   │   ├── schedules.json
+│   │   └── thingsboard.json
+│   ├── healthcheck.sh
+│   ├── install.sh
+│   ├── smart_farm_logger.js
+│   ├── smart-farm-logger.service
+│   ├── static
+│   │   └── jsmpeg.min.js
+│   └── status.sh
+├── thingsboard-widget-jsmpeg-multi.html
+├── thingsboard-widget-jsmpeg-single.html
+├── tools
+│   ├── check-status
+│   └── restart-server
+├── tree2202.txt
+├── TROUBLESHOOTING_FLOWCHART.md
+└── USAGE_GUIDE.md
+
+13 directories, 29 files
