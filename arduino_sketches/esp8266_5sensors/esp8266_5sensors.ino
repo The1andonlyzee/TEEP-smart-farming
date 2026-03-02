@@ -218,7 +218,8 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 }
 
 void processRPC(char* message) {
-  // Simplified - no sensor number needed for relay commands
+  Serial.print("DEBUG RPC message: ");
+  Serial.println(message);
   
   if (strstr(message, "\"method\":\"setRelay\"") != NULL) {
     if (strstr(message, "\"state\":true") != NULL || strstr(message, "true") != NULL) {
@@ -230,26 +231,14 @@ void processRPC(char* message) {
       Serial.println("→ Sent RELAY_OFF to Mega");
     }
   }
-  // Keep mode commands per-sensor (they still make sense for auto/manual decision)
   else if (strstr(message, "\"method\":\"setMode\"") != NULL) {
-    char* sensorStr = strstr(message, "\"sensor\":");
-    int sensorNum = 0;
-    
-    if (sensorStr != NULL) {
-      sensorNum = atoi(sensorStr + 9);
-    }
-    
-    if (sensorNum >= 1 && sensorNum <= NUM_SENSORS) {
-      if (strstr(message, "\"mode\":\"auto\"") != NULL) {
-        char cmd[20];
-        snprintf(cmd, sizeof(cmd), "MODE_AUTO_%d", sensorNum);
-        Serial.println(cmd);
-      } 
-      else if (strstr(message, "\"mode\":\"manual\"") != NULL) {
-        char cmd[20];
-        snprintf(cmd, sizeof(cmd), "MODE_MANUAL_%d", sensorNum);
-        Serial.println(cmd);
-      }
+    if (strstr(message, "\"auto\"") != NULL) {
+      Serial.println("MODE_AUTO");
+      Serial.println("→ Sent MODE_AUTO to Mega");
+    } 
+    else if (strstr(message, "\"manual\"") != NULL) {
+      Serial.println("MODE_MANUAL");
+      Serial.println("→ Sent MODE_MANUAL to Mega");
     }
   }
 }

@@ -35,7 +35,8 @@ int sensorPins[NUM_SENSORS] = {SENSOR_1_PIN, SENSOR_2_PIN, SENSOR_3_PIN, SENSOR_
 int moistureRaw[NUM_SENSORS] = {0};
 int moisturePercent[NUM_SENSORS] = {0};
 bool relayState = false;
-bool autoMode[NUM_SENSORS] = {true, true, true, true, true};
+bool autoMode = true;
+
 
 unsigned long lastSensorRead = 0;
 unsigned long lastDataSent = 0;
@@ -94,29 +95,28 @@ void readAllSensors() {
 }
 
 void controlRelayAuto() {
-  int totalMoisture = 0;
-  int activeCount = 0;
+  if (!autoMode) return;  // Don't run if in manual mode
+  
+  // Check if ANY sensor is dry
+  bool anyDry = false;
   
   for (int i = 0; i < NUM_SENSORS; i++) {
-    if (autoMode[i]) {
-      totalMoisture += moistureRaw[i];
-      activeCount++;
+    if (moistureRaw[i] > MOISTURE_THRESHOLD) {
+      anyDry = true;
+      break;  // Found one dry sensor, no need to check others
     }
   }
   
-  if (activeCount > 0) {
-    int avgMoisture = totalMoisture / activeCount;
-    
-    if (avgMoisture > MOISTURE_THRESHOLD && !relayState) {
-      relayState = true;
-      digitalWrite(RELAY_PIN, LOW);
-      Serial.print("🔴 RELAY ON - Avg moisture: ");
-      Serial.println(avgMoisture);
-    } else if (avgMoisture <= MOISTURE_THRESHOLD && relayState) {
-      relayState = false;
-      digitalWrite(RELAY_PIN, HIGH);
-      Serial.println("🔵 RELAY OFF");
-    }
+  // Control relay based on anyDry
+  if (anyDry && !relayState) {
+    relayState = true;
+    digitalWrite(RELAY_PIN, LOW);
+    Serial.println("🔴 RELAY ON - At least one sensor DRY");
+  } 
+  else if (!anyDry && relayState) {
+    relayState = false;
+    digitalWrite(RELAY_PIN, HIGH);
+    Serial.println("🔵 RELAY OFF - All sensors WET");
   }
 }
 
@@ -131,19 +131,18 @@ void controlRelayManual(bool state) {
 
 void sendDataToNodeMCU() {
   // Format: raw1,pct1,relay1,mode1|raw2,pct2,relay2,mode2|...
-  // Example: 723,45,1,auto|650,32,0,manual|...
   
   for (int i = 0; i < NUM_SENSORS; i++) {
     Serial1.print(moistureRaw[i]);
     Serial1.print(",");
     Serial1.print(moisturePercent[i]);
     Serial1.print(",");
-    Serial1.print((i == 0) ? (relayState ? "1" : "0") : "0");  // Only send relay on first sensor    
+    Serial1.print((i == 0) ? (relayState ? "1" : "0") : "0");  // Only send relay on first sensor
     Serial1.print(",");
-    Serial1.print(autoMode[i] ? "auto" : "manual");
+    Serial1.print(autoMode ? "auto" : "manual");  // Same mode for all sensors
     
     if (i < NUM_SENSORS - 1) {
-      Serial1.print("|");  // Separator between sensors
+      Serial1.print("|");
     }
   }
   Serial1.println();
@@ -160,7 +159,7 @@ void sendDataToNodeMCU() {
     Serial.print("%,R=");
     Serial.print(relayState);
     Serial.print(",");
-    Serial.print(autoMode[i] ? "A" : "M");
+    Serial.print(autoMode ? "A" : "M");  // Same mode
     Serial.print(") ");
   }
   Serial.println();
@@ -172,27 +171,19 @@ void processCommand(String cmd) {
   Serial.println(cmd);
   
   if (cmd == "RELAY_ON") {
+    autoMode = false;  // Switch to manual
     controlRelayManual(true);
   }
   else if (cmd == "RELAY_OFF") {
+    autoMode = false;  // Switch to manual
     controlRelayManual(false);
   }
-  else if (cmd.startsWith("MODE_AUTO_")) {
-    int sensor = cmd.substring(10).toInt() - 1;
-    if (sensor >= 0 && sensor < NUM_SENSORS) {
-      autoMode[sensor] = true;
-      Serial.print("Sensor ");
-      Serial.print(sensor + 1);
-      Serial.println(" switched to AUTO mode");
-    }
+  else if (cmd == "MODE_AUTO") {
+    autoMode = true;
+    Serial.println("Switched to AUTO mode (ANY DRY logic)");
   }
-  else if (cmd.startsWith("MODE_MANUAL_")) {
-    int sensor = cmd.substring(12).toInt() - 1;
-    if (sensor >= 0 && sensor < NUM_SENSORS) {
-      autoMode[sensor] = false;
-      Serial.print("Sensor ");
-      Serial.print(sensor + 1);
-      Serial.println(" switched to MANUAL mode");
-    }
+  else if (cmd == "MODE_MANUAL") {
+    autoMode = false;
+    Serial.println("Switched to MANUAL mode");
   }
 }
