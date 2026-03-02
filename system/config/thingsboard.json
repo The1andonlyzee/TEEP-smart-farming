@@ -1,0 +1,13 @@
+{
+  "host": "http://localhost:8080",
+  "username": "tenant@thingsboard.org",
+  "password": "tenant",
+  "devices": [
+    {
+      "name": "Arduino_Mega_Sensors",
+      "deviceId": "a8046cd0-0726-11f1-b87c-d9ef95b7b8d0",
+      "description": "Main Arduino Mega with soil sensors"
+    }
+  ],
+  "_comment": "Run 'node tb_config_helper.js' to automatically get your device IDs"
+}

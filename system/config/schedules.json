@@ -1,0 +1,32 @@
+{
+  "timelapse": {
+    "schedule": "0 * * * *",
+    "enabled": true,
+    "imageQuality": 10,
+    "imageWidth": 1920,
+    "imageHeight": 1080,
+    "description": "Capture images every hour for time-lapse videos"
+  },
+  "sensors": {
+    "schedule": "*/5 * * * *",
+    "enabled": true,
+    "description": "Log sensor data every 10 minutes"
+  },
+  "dataDirectory": "../data",
+  "_scheduleExamples": {
+    "everyHour": "0 * * * *",
+    "every30Minutes": "*/30 * * * *",
+    "every10Minutes": "*/10 * * * *",
+    "every5Minutes": "*/5 * * * *",
+    "every2Hours": "0 */2 * * *",
+    "dailyAt9AM": "0 9 * * *",
+    "workHoursOnly": "0 9-17 * * *"
+  },
+  "_imageQualityGuide": {
+    "2": "Highest quality (~500KB per image)",
+    "5": "High quality (~200KB per image) - RECOMMENDED for time-lapse",
+    "10": "Good quality (~100KB per image)",
+    "15": "Medium quality (~50KB per image)",
+    "20": "Lower quality (~30KB per image)"
+  }
+}

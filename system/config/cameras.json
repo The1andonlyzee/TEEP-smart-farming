@@ -1,0 +1,23 @@
+{
+  "cameras": [
+    {
+      "name": "Camera_Zone_1",
+      "rtspUrl": "rtsp://192.168.0.237:554/stream1",
+      "wsPort": 9001,
+      "enabled": true,
+      "description": "Main growing area camera"
+    },
+    {
+      "name": "Camera_Zone_2",
+      "rtspUrl": "rtsp://192.168.0.172:554/profile1",
+      "wsPort": 9002,
+      "enabled": true,
+      "description": "Secondary monitoring camera"
+    }
+  ],
+  "_instructions": {
+    "rtspUrl": "Format: rtsp://CAMERA_IP:PORT/STREAM_PATH",
+    "wsPort": "WebSocket port for streaming (9001, 9002, etc.)",
+    "enabled": "Set to false to disable a camera without deleting it"
+  }
+}
