@@ -5,8 +5,8 @@
 
 # Configuration
 SERVER_URL="http://localhost:3000/status"
-LOG_FILE="/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/camera-utils/logs/healthcheck.log"
-SCRIPT_DIR="/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/camera-utils"
+LOG_FILE="/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/system/logs/healthcheck.log"
+SCRIPT_DIR="/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/system"
 SCRIPT_NAME="smart_farm_logger.js"
 MAX_RETRIES=3
 
@@ -99,7 +99,7 @@ fi
 
 # Check if data is being logged (optional)
 today=$(date +%Y-%m-%d)
-sensor_log="$SCRIPT_DIR/farm_data/sensor_logs/${today}.csv"
+sensor_log="$SCRIPT_DIR/../data/sensor_logs/${today}.csv"
 if [ -f "$sensor_log" ]; then
     # Check if file was modified in last 30 minutes
     last_modified=$(stat -c %Y "$sensor_log")

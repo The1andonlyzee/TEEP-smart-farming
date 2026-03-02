@@ -3,7 +3,7 @@
 # Smart Farm Logger Status Monitor
 # Shows current status of the logging system
 
-SCRIPT_DIR="/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/camera-utils"
+SCRIPT_DIR="/home/k410-2nd-ubuntu-pc/Documents/TEEP-smart-farming/system"
 
 echo "╔════════════════════════════════════════════════════╗"
 echo "║     Smart Farm Logger - Status Monitor            ║"
@@ -41,7 +41,7 @@ echo ""
 TODAY=$(date +%Y-%m-%d)
 
 # Sensor logs
-SENSOR_LOG="$SCRIPT_DIR/farm_data/sensor_logs/${TODAY}.csv"
+SENSOR_LOG="$SCRIPT_DIR/../data/sensor_logs/${TODAY}.csv"
 if [ -f "$SENSOR_LOG" ]; then
     LINES=$(wc -l < "$SENSOR_LOG")
     LAST_MOD=$(stat -c %y "$SENSOR_LOG" | cut -d. -f1)
@@ -56,7 +56,7 @@ echo ""
 
 # Time-lapse images
 for camera in Camera_Zone_1 Camera_Zone_2; do
-    IMG_DIR="$SCRIPT_DIR/farm_data/timelapse_images/$camera"
+    IMG_DIR="$SCRIPT_DIR/../data/timelapse_images/$camera"
     if [ -d "$IMG_DIR" ]; then
         IMG_COUNT=$(find "$IMG_DIR" -name "frame_*.jpg" -type f | wc -l)
         LATEST="$IMG_DIR/latest.jpg"
@@ -83,8 +83,8 @@ echo "   Available: $DISK_AVAIL"
 echo ""
 
 # Data directory size
-DATA_SIZE=$(du -sh "$SCRIPT_DIR/farm_data" 2>/dev/null | cut -f1)
-echo "   farm_data/: $DATA_SIZE"
+DATA_SIZE=$(du -sh "$SCRIPT_DIR/../data" 2>/dev/null | cut -f1)
+echo "   ../data/: $DATA_SIZE"
 
 echo ""
 
