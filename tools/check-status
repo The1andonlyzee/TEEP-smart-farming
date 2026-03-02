@@ -1,0 +1,4 @@
+#!/bin/bash
+cd "$(dirname "$0")/../system"
+./status.sh
+read -p "Press Enter to close..."

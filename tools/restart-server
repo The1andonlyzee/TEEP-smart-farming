@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "Restarting server..."
+sudo systemctl restart smart-farm-logger
+sleep 3
+cd "$(dirname "$0")/../system"
+./status.sh
+read -p "Press Enter to close..."
+
+#password is = mpi1
