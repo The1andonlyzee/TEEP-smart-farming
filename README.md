@@ -21,6 +21,7 @@ datasets/
 ```
 
 Perfect for:
+
 - Building ML training datasets
 - Time-series analysis
 - Computer vision + sensor fusion research
@@ -37,6 +38,7 @@ npm install
 ```
 
 **Required:**
+
 - Node.js (v16+)
 - FFmpeg (for snapshot capture)
 - ThingsBoard (running with your devices)
@@ -50,23 +52,24 @@ node tb_config_helper.js
 ```
 
 This will:
+
 - Connect to your ThingsBoard
 - List all your devices
 - Generate the configuration code
 - Test telemetry access
 
-Copy the output and paste into `jsmpeg_snapshot_server.js` at the `TB_CONFIG` section.
+Copy the output and paste into `smart_farm_logger.js` at the `TB_CONFIG` section.
 
 ### 3. Update Camera URLs
 
-Edit `jsmpeg_snapshot_server.js` and update camera configurations:
+Edit `smart_farm_logger.js` and update camera configurations:
 
 ```javascript
 const cameras = [
   {
-    name: 'Camera_Zone_1',
-    rtspUrl: 'rtsp://192.168.0.237:554/stream1',  // Your camera IP
-    wsPort: 9001
+    name: "Camera_Zone_1",
+    rtspUrl: "rtsp://192.168.0.237:554/stream1", // Your camera IP
+    wsPort: 9001,
   },
   // Add more cameras...
 ];
@@ -75,10 +78,11 @@ const cameras = [
 ### 4. Run the Server
 
 ```bash
-node jsmpeg_snapshot_server.js
+node smart_farm_logger.js
 ```
 
 Or for development with auto-reload:
+
 ```bash
 npm run dev
 ```
@@ -144,19 +148,20 @@ img = Image.open('datasets/snapshots/2026-02-20/Camera_Zone_1_2026-02-20T10-00-0
 
 ### Capture Schedule
 
-Edit in `jsmpeg_snapshot_server.js`:
+Edit in `smart_farm_logger.js`:
 
 ```javascript
 const SNAPSHOT_CONFIG = {
-  schedule: '*/10 * * * *',  // Every 10 minutes
-  baseDir: './datasets',
-  imageQuality: 2,  // 2 = high quality
+  schedule: "*/10 * * * *", // Every 10 minutes
+  baseDir: "./datasets",
+  imageQuality: 2, // 2 = high quality
   imageWidth: 1280,
-  imageHeight: 720
+  imageHeight: 720,
 };
 ```
 
 **Schedule Examples:**
+
 - `'*/5 * * * *'` - Every 5 minutes
 - `'0 * * * *'` - Every hour
 - `'0 9-17 * * *'` - Every hour, 9 AM - 5 PM
@@ -174,11 +179,13 @@ const SNAPSHOT_CONFIG = {
 ## 🔧 API Endpoints
 
 ### Check Status
+
 ```bash
 curl http://localhost:3000/status
 ```
 
 Returns:
+
 ```json
 {
   "status": "running",
@@ -191,6 +198,7 @@ Returns:
 ```
 
 ### Trigger Manual Capture
+
 ```bash
 curl http://localhost:3000/capture
 ```
@@ -201,13 +209,13 @@ Or click the button on the web dashboard.
 
 ## 📖 Files Overview
 
-| File | Purpose |
-|------|---------|
-| `jsmpeg_snapshot_server.js` | Main server with snapshot + logging |
-| `tb_config_helper.js` | Get ThingsBoard device IDs |
-| `dataset_loader.py` | Python utilities for data analysis |
-| `SETUP_GUIDE.md` | Detailed setup and troubleshooting |
-| `package.json` | Node.js dependencies |
+| File                   | Purpose                             |
+| ---------------------- | ----------------------------------- |
+| `smart_farm_logger.js` | Main server with snapshot + logging |
+| `tb_config_helper.js`  | Get ThingsBoard device IDs          |
+| `dataset_loader.py`    | Python utilities for data analysis  |
+| `SETUP_GUIDE.md`       | Detailed setup and troubleshooting  |
+| `package.json`         | Node.js dependencies                |
 
 ---
 
@@ -322,6 +330,7 @@ Built for smart farm research at Hasanuddin University & Southern Taiwan Univers
 ## 📞 Support
 
 For issues:
+
 1. Check `SETUP_GUIDE.md` troubleshooting section
 2. Run `node tb_config_helper.js` to diagnose ThingsBoard
 3. Review logs in terminal
@@ -334,8 +343,8 @@ For issues:
 ```bash
 npm install
 node tb_config_helper.js  # Get your config
-# Update jsmpeg_snapshot_server.js with config
-node jsmpeg_snapshot_server.js
+# Update smart_farm_logger.js with config
+node smart_farm_logger.js
 ```
 
 Then open http://localhost:3000 and watch your smart farm! 🌱
